@@ -228,6 +228,23 @@ Changing the learning rate while training can speed-up early training with a big
 
 `Learning Rate Callback <https://colab.research.google.com/github/slightperturbation/ml_examples/blob/master/ML_Examples_Training_Callbacks.ipynb#scrollTo=0ByKI22dcEmg>`_
 
+
+Restarting training from a saved model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If a model has been saved to the Saved Model format, it's easy to restore and restart training. First, load the model from disk, then just call fit to restart training. This works because the Saved Model format also stores extras like the optimizer and loss function.
+
+.. code-block:: python
+
+    # Original training...
+    model.fit(input, labels)
+    model.save('the_model.SavedModel')
+
+    # Later, restore the model from disk and restart training
+    model = keras.models.load_model('the_model.SavedModel')
+    mode.fit(input, labels)
+
+
 Evaluation
 ----------
 
@@ -275,4 +292,38 @@ Add profiling data to TensorBoard:
     model.fit(dataset,
               epochs=1,
               callbacks=[tb_callback])
+
+
+Deployment
+----------
+
+Saving and Restoring Models
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TensorFlow's SavedModel format stores the full model (architecture and weights, plus the optimizer and loss) in one file. You can use it if your model is a subclass of Model or a Keras Sequential or Functional model. 
+
+.. code-block:: python
+
+    model = ...
+    model.save('path/to/model_file.savedModel')
+
+
+To load the model back in:
+
+.. code-block:: python
+
+    from tensorflow import keras
+    model = keras.models.load_model('path/to/model_file.savedModel')
+
+
+Using the Loaded Model
+^^^^^^^^^^^^^^^^^^^^^^
+
+After training or loading a trained model, model.predict() lets you exercise the model:
+
+.. code-block:: python
+
+    from tensorflow import keras
+    model = keras.models.load_model('path/to/model_file.savedModel')
+    output = model.predict(input)
 

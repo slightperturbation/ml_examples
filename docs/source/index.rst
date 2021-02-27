@@ -11,6 +11,7 @@ Examples for Learning Machine Learning
 	      
   pipeline.rst
   classification.rst
+  text.rst
 
 
 
